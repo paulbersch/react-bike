@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="container">
+    <div id="app">Loading...</div>
+    <div id="debug"></div>
+</div>
+<script>
+    // TODO: something better
+    function initMap() {
+        window.googleMapsAPILoaded = true;
+    }
+</script>
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADgWheMSsjtf5dImgyTt1m1RubS5xeSKo&callback=initMap">
+</script>
+</body>
+</html>
