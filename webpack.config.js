@@ -1,4 +1,10 @@
 "use strict";
+try {
+  require('os').networkInterfaces();
+} catch (e) {
+  require('os').networkInterfaces = () => ({});
+}
+
 var webpack = require('webpack');
 var path = require('path');
 var loaders = require('./webpack.loaders');

@@ -1,4 +1,3 @@
-import 'whatwg-fetch';
 import React from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -53,13 +52,13 @@ class SearchPanel extends React.Component {
         this.setState({
             distance: event.target.value
         });
+        this.props.dispatch(updateDistance(event.target.value));
     };
 
     handleSubmit = (event) => {
         event.preventDefault();
         this.props.dispatch(updateSearchTerm(this.state.searchTerm));
         this.props.dispatch(updateDistance(this.state.distance));
-        console.log("submitted events");
         return false;
     };
 
@@ -67,12 +66,10 @@ class SearchPanel extends React.Component {
         event.preventDefault();
         this.props.dispatch(updateSearchTerm("Chicago, IL"));
         this.props.dispatch(updateDistance(8));
-        console.log("reset form");
         return false;
     };
 
     render() {
-        console.log("Rendering search panel.");
         return (
             <div className="search-panel">
                 <form onSubmit={this.handleSubmit}>
@@ -81,17 +78,15 @@ class SearchPanel extends React.Component {
                         <option value="0.25">0.25mi</option>
                         <option value="0.50">0.50mi</option>
                         <option value="1.00">1.00mi</option>
-                        <option value="2.00">2.00mi</option>
                         <option value="3.00">3.00mi</option>
-                        <option value="4.00">4.00mi</option>
                         <option value="5.00">5.00mi</option>
+                        <option value="8.00">8.00mi</option>
+                        <option value="13.00">13.00mi</option>
                     </select>
                     <input type="submit" name="search-button" value="Search" />
                     <input type="submit" name="clear-button" value="Clear" onClick={this.handleClear}/>
-                    <input type="text" value={this.state.searchTerm} readOnly="readOnly" />
-                    <input type="text" value={this.props.searchTerm} readOnly="readOnly" />
-                    <input type="text" value={this.state.distance} readOnly="readOnly" />
-                    <input type="text" value={this.props.distance} readOnly="readOnly" />
+                    <pre>State:{JSON.stringify(this.state, null, 2)}</pre>
+                    <pre>Props:{JSON.stringify(this.props, null, 2)}</pre>
                 </form>
             </div>
         );
@@ -102,6 +97,7 @@ const mapStateToProps = (state) => {
     "use strict";
     let newState = {};
 
+    /*
     if (state.panel.searchTerm) {
         newState.searchTerm = state.panel.searchTerm;
     }
@@ -109,8 +105,9 @@ const mapStateToProps = (state) => {
     if (state.panel.distance) {
         newState.distance = state.panel.distance;
     }
+    */
 
-    console.log("updating props to: ", newState);
+    console.log("updating searchpanel props to: ", newState);
     return newState;
 };
 

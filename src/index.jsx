@@ -1,7 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, dispatch, combineReducers } from 'redux';
+import { createStore, dispatch, combineReducers, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga'
+import { GeocodeSaga } from './sagas/GeocodeSaga'
 import { Provider, connect } from 'react-redux';
 import { Router, Route, hashHistory } from 'react-router';
 import { Panel } from './components/Panel';
@@ -17,6 +19,10 @@ const gMapReducer = (state = {}, action) => {
         case 'UPDATE_CENTER':
             return Object.assign({}, state, {
                 latLng: action.payload.latLng
+            });
+        case 'UPDATE_SEARCH_BOUNDS':
+            return Object.assign({}, state, {
+                bounds: action.payload.bounds
             });
         case 'UPDATE_ZOOM':
             return state;
@@ -49,18 +55,19 @@ const panelReducer = (state = {}, action) => {
             return state;
     }
 }
-const initalState = {
-};
+const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
     combineReducers({ panel: panelReducer, map: gMapReducer}),
-    initalState
+    applyMiddleware(sagaMiddleware)
 );
+
+sagaMiddleware.run(GeocodeSaga);
 
 class PanelWithDefaultSearch extends React.Component {
     render() {
         return (
-            <Panel searchTerm="Default" distance={2} />
+            <Panel searchTerm="Florida" distance={2} />
         );
     }
 }
