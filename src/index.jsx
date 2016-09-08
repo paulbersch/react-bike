@@ -2,11 +2,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, dispatch, combineReducers, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga'
-import { GeocodeSaga } from './sagas/GeocodeSaga'
+import createSagaMiddleware from 'redux-saga';
+import { GeocodeSaga } from './sagas/GeocodeSaga';
+import { StationsSaga } from './sagas/StationsSaga';
 import { Provider, connect } from 'react-redux';
 import { Router, Route, hashHistory } from 'react-router';
 import { Panel } from './components/Panel';
+import createLogger from 'redux-logger';
 
 const gMapReducer = (state = {}, action) => {
     "use strict";
@@ -24,6 +26,10 @@ const gMapReducer = (state = {}, action) => {
             return Object.assign({}, state, {
                 bounds: action.payload.bounds
             });
+        case 'UPDATE_STATIONS':
+            return Object.assign({}, state, {
+                stations: action.payload.stations
+            });
         case 'UPDATE_ZOOM':
             return state;
         case 'CLEAR_MARKERS':
@@ -39,14 +45,10 @@ const panelReducer = (state = {}, action) => {
     "use strict";
 
     switch (action.type) {
-        case 'UPDATE_SEARCH_TERM':
+        case 'UPDATE_SEARCH':
             console.log(state, action);
             return Object.assign({}, state, {
-                searchTerm: action.payload.searchTerm
-            });
-        case 'UPDATE_DISTANCE':
-            console.log(state, action);
-            return Object.assign({}, state, {
+                searchTerm: action.payload.searchTerm,
                 distance: action.payload.distance
             });
         case 'CREATE_SEARCH_RESULT':
@@ -56,13 +58,15 @@ const panelReducer = (state = {}, action) => {
     }
 }
 const sagaMiddleware = createSagaMiddleware();
+const logger = createLogger();
 
 const store = createStore(
     combineReducers({ panel: panelReducer, map: gMapReducer}),
-    applyMiddleware(sagaMiddleware)
+    applyMiddleware(sagaMiddleware, logger)
 );
 
 sagaMiddleware.run(GeocodeSaga);
+sagaMiddleware.run(StationsSaga);
 
 class PanelWithDefaultSearch extends React.Component {
     render() {

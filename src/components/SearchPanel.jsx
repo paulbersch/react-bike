@@ -3,19 +3,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 /*** action creators ***/
-const updateSearchTerm = (searchTerm) => {
+const updateSearch = (searchTerm, distance) => {
     return {
         type: "UPDATE_SEARCH_TERM",
         payload: {
-            searchTerm: searchTerm
-        }
-    }
-};
-
-const updateDistance = (distance) => {
-    return {
-        type: "UPDATE_DISTANCE",
-        payload: {
+            searchTerm: searchTerm,
             distance: distance
         }
     }
@@ -52,13 +44,12 @@ class SearchPanel extends React.Component {
         this.setState({
             distance: event.target.value
         });
-        this.props.dispatch(updateDistance(event.target.value));
+        this.props.dispatch(updateSearch(this.state.searchTerm, event.target.value));
     };
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.dispatch(updateSearchTerm(this.state.searchTerm));
-        this.props.dispatch(updateDistance(this.state.distance));
+        this.props.dispatch(updateSearch(this.state.searchTerm, this.state.distance));
         return false;
     };
 

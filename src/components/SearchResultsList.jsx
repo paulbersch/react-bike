@@ -1,7 +1,6 @@
 /**
  * Created by paulb on 9/3/2016.
  */
-import 'whatwg-fetch';
 import React from "react";
 import { connect } from 'react-redux';
 

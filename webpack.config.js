@@ -42,7 +42,7 @@ loaders.push({
 module.exports = {
 	entry: [
 		`webpack-dev-server/client?http://${HOST}:${PORT}`,
-		`webpack/hot/only-dev-server`,
+		//`webpack/hot/only-dev-server`,
 		`./src/index.jsx` // Your appʼs entry point
 	],
 	devtool: process.env.WEBPACK_DEVTOOL || 'cheap-module-source-map',
@@ -61,7 +61,7 @@ module.exports = {
 		// do not print bundle build stats
 		noInfo: true,
 		// enable HMR
-		hot: true,
+		hot: false,
 		// embed the webpack-dev-server runtime into the bundle
 		inline: true,
 		// serve index.html in place of 404 responses to allow HTML5 history
@@ -71,7 +71,7 @@ module.exports = {
 	},
 	plugins: [
 		new webpack.NoErrorsPlugin(),
-		new webpack.HotModuleReplacementPlugin(),
+		//new webpack.HotModuleReplacementPlugin(),
 		new HtmlWebpackPlugin({
 			template: './src/template.html'
 		})

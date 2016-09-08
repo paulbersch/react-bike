@@ -8,7 +8,8 @@ class GoogleMap extends React.Component {
 
         this.setState({
             latLng: nextProps.latLng,
-            bounds: nextProps.bounds
+            bounds: nextProps.bounds,
+            stations: nextProps.stations
         });
     }
 
@@ -37,7 +38,42 @@ class GoogleMap extends React.Component {
 
     componentDidUpdate() {
         this.state.map.fitBounds(this.state.bounds);
+        if (!this.rectangle) {
+            this.rectangle = new google.maps.Rectangle({
+                bounds: this.state.bounds,
+                fillColor: "blue",
+                fillOpacity: 0.2,
+                map: this.state.map
+            });
+        } else {
+            this.rectangle.setBounds(this.state.bounds);
+        }
+
+        this.updateStations();
+
+        debugger;
     }
+
+    updateStations() {
+        if (this.state.markers) {
+            this.state.markers.forEach((marker) => {
+                marker.setMap();
+            });
+        }
+
+        this.state.markers = [];
+        this.state.markersLookup = {};
+
+        this.state.stations.forEach((station) => {
+            let marker = new google.maps.Marker({
+                position: { lat: station.latitude, lng: station.longitude },
+                map: this.state.map
+            });
+            this.state.markers.push(marker);
+            this.state.markersLookup[station.id] = marker;
+        });
+    }
+
 
     render() {
         return (
@@ -61,6 +97,10 @@ const mapStateToProps = (state) => {
         newState.bounds = state.map.bounds;
     }
 
+    if (state.map.stations) {
+        newState.stations = state.map.stations;
+    }
+
     console.log("gmaps updating props to: ", newState);
     return newState;
 };
@@ -70,7 +110,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         dispatch: dispatch
     };
-
 };
 
 export default connect(

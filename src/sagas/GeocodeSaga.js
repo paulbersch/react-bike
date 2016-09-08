@@ -28,11 +28,10 @@ const updateBounds = (bounds) => {
     }
 };
 
-const doGeocode = (searchTerm) => {
+const doGeocode = (searchTerm, distance) => {
     var geocodeCallback, geocodeRequest, geocoder = new google.maps.Geocoder;
 
     var geocodeResponse = new Promise((resolve, reject) => {
-        "use strict";
         geocodeCallback = function(results, status) {
             console.log('geocodeResult', results, status);
             if (status == 'OK') {
@@ -51,10 +50,9 @@ const doGeocode = (searchTerm) => {
     });
 
     return geocodeResponse.then((center) => {
-        "use strict";
         center = center.toJSON();
         console.log("in the then", center);
-        let box = distanceBox(center.lat, center.lng, 8);
+        let box = distanceBox(center.lat, center.lng, distance);
         let bounds = new google.maps.LatLngBounds(new google.maps.LatLng(box[0], box[1]), new google.maps.LatLng(box[2], box[3]));
         return {
             center: center,
@@ -65,13 +63,12 @@ const doGeocode = (searchTerm) => {
 
 function* geoCode(action) {
     try {
-        const results = yield call(doGeocode, action.payload.searchTerm);
-        console.log("geocode promise", results);
-        //yield put({type: "GEOCODE_SUCCESS", payload: results});
+        yield put({type: "GEOCODE_START", payload: {}});
+        const results = yield call(doGeocode, action.payload.searchTerm, action.payload.distance);
         const { center, bounds } = results;
-        console.log("unpacked", center, bounds);
         yield put(updateBounds(bounds.toJSON()));
         yield put(updateCenter(center.toJSON()));
+        yield put({type: "GEOCODE_SUCCESS", payload: {}});
     } catch (e) {
         yield put({type: "GEOCODE_FAILED", message: e.message});
     }

@@ -10,7 +10,7 @@ export function distanceBox(lat, lng, radius) {
     var latR = radius / (milesPerNauticalMile * 60.0);
     var lngR = radius / (Math.cos(lat * rad) * milesPerNauticalMile * 60.0);
 
-    return [lat + latR, lng - lngR, lat - latR, lng + lngR];
+    return [lat - latR, lng - lngR, lat + latR, lng + lngR];
 }
 
 export function boxContainsPoint(box, lat, lng) {
