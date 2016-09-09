@@ -17,7 +17,8 @@ class GoogleMap extends React.Component {
         console.log("Should update?", nextProps, nextState);
         if (this.state && (
             nextProps.latLng != this.state.latLng ||
-            nextProps.bounds != this.state.bounds)) {
+            nextProps.bounds != this.state.bounds ||
+            nextProps.stations != this.state.stations)) {
             console.log("Yes, it should update.");
             return true;
         } else {
@@ -28,7 +29,7 @@ class GoogleMap extends React.Component {
 
     componentDidMount() {
         let map = new google.maps.Map(document.getElementById('googleMap'), {
-            center: {lat: -34.397, lng: 150.644},
+            center: {lat: 41.8781136, lng: -87.62979819999998},
             zoom: 20
         });
         this.setState({
@@ -49,9 +50,9 @@ class GoogleMap extends React.Component {
             this.rectangle.setBounds(this.state.bounds);
         }
 
-        this.updateStations();
-
-        debugger;
+        if (this.state.stations) {
+            this.updateStations();
+        }
     }
 
     updateStations() {

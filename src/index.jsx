@@ -71,7 +71,7 @@ sagaMiddleware.run(StationsSaga);
 class PanelWithDefaultSearch extends React.Component {
     render() {
         return (
-            <Panel searchTerm="Florida" distance={2} />
+            <Panel searchTerm="Chicago, IL" distance={.5} />
         );
     }
 }

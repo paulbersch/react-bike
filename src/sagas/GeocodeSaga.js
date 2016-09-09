@@ -46,6 +46,7 @@ const doGeocode = (searchTerm, distance) => {
             bounds: CHICAGO_BOUNDS // anchor the search in the chicago vicinity
         };
 
+        console.log("submitting geocode request");
         geocoder.geocode(geocodeRequest, geocodeCallback.bind(this));
     });
 
@@ -66,10 +67,13 @@ function* geoCode(action) {
         yield put({type: "GEOCODE_START", payload: {}});
         const results = yield call(doGeocode, action.payload.searchTerm, action.payload.distance);
         const { center, bounds } = results;
+        console.log("got back center and bounds", center, bounds);
         yield put(updateBounds(bounds.toJSON()));
-        yield put(updateCenter(center.toJSON()));
+        console.log("update center");
+        yield put(updateCenter(center));
         yield put({type: "GEOCODE_SUCCESS", payload: {}});
     } catch (e) {
+        console.log(e);
         yield put({type: "GEOCODE_FAILED", message: e.message});
     }
 }

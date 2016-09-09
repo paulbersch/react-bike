@@ -32,6 +32,7 @@ class SearchPanel extends React.Component {
     }
 
     componentDidMount() {
+        this.props.dispatch(updateSearch(this.state.searchTerm, this.state.distance));
     }
 
     handleLocationChange = (event) => {
@@ -55,8 +56,7 @@ class SearchPanel extends React.Component {
 
     handleClear = (event) => {
         event.preventDefault();
-        this.props.dispatch(updateSearchTerm("Chicago, IL"));
-        this.props.dispatch(updateDistance(8));
+        this.props.dispatch(updateSearch("Chicago, IL", 8));
         return false;
     };
 
@@ -65,14 +65,15 @@ class SearchPanel extends React.Component {
             <div className="search-panel">
                 <form onSubmit={this.handleSubmit}>
                     <label htmlFor="search-location">Location:</label><input id="search-location" name="search-location" value={this.state.searchTerm} onChange={this.handleLocationChange}/>
-                    <select onChange={this.handleDistanceChange}>
-                        <option value="0.25">0.25mi</option>
-                        <option value="0.50">0.50mi</option>
-                        <option value="1.00">1.00mi</option>
-                        <option value="3.00">3.00mi</option>
-                        <option value="5.00">5.00mi</option>
-                        <option value="8.00">8.00mi</option>
-                        <option value="13.00">13.00mi</option>
+                    <select onChange={this.handleDistanceChange} value={this.state.distance}>
+                        <option value={0.25}>0.25mi</option>
+                        <option value={0.50}>0.50mi</option>
+                        <option value={1}>1.00mi</option>
+                        <option value={2}>2.00mi</option>
+                        <option value={3}>3.00mi</option>
+                        <option value={5}>5.00mi</option>
+                        <option value={8}>8.00mi</option>
+                        <option value={13}>13.00mi</option>
                     </select>
                     <input type="submit" name="search-button" value="Search" />
                     <input type="submit" name="clear-button" value="Clear" onClick={this.handleClear}/>

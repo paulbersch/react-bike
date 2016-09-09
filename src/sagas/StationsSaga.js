@@ -48,4 +48,3 @@ function* getStations(action) {
 export function* StationsSaga() {
     yield* takeLatest("UPDATE_SEARCH_BOUNDS", getStations);
 }
-git push()
