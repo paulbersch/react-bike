@@ -34,7 +34,7 @@ export class Panel extends React.Component {
     render() {
         return (
             <div id="panel">
-                <SearchPanel searchTerm={this.props.searchTerm || this.props.params.searchTerm} distance={parseInt(this.props.distance || this.props.params.distance)} />
+                <SearchPanel searchTerm={this.props.searchTerm || this.props.params.searchTerm} distance={this.props.distance || this.props.params.distance} />
                 <ResultsList/>
                 <GoogleMap searchTerm={this.props.searchTerm || this.props.params.searchTerm} distance={this.props.distance || this.props.params.distance} />
             </div>
