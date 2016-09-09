@@ -6,7 +6,7 @@ import createSagaMiddleware from 'redux-saga';
 import { GeocodeSaga } from './sagas/GeocodeSaga';
 import { StationsSaga } from './sagas/StationsSaga';
 import { Provider, connect } from 'react-redux';
-import { Router, Route, hashHistory } from 'react-router';
+import { Router, Route, IndexRedirect, hashHistory } from 'react-router';
 import { Panel } from './components/Panel';
 import createLogger from 'redux-logger';
 
@@ -79,8 +79,11 @@ class PanelWithDefaultSearch extends React.Component {
 ReactDOM.render(
     <Provider store={store}>
         <Router history={hashHistory}>
-            <Route path="/search/:searchTerm/:distance/" component={ Panel }/>
-            <Route path="/search/" component={ PanelWithDefaultSearch } />
+            <Route path="/">
+                <IndexRedirect to="/search"/>
+                <Route path="/search/:searchTerm/:distance" component={ Panel }/>
+                <Route path="/search" component={ PanelWithDefaultSearch } />
+            </Route>
         </Router>
     </Provider>, document.querySelector("#app")
 );
